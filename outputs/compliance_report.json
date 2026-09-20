@@ -1,0 +1,127 @@
+{
+  "timestamp": "2026-01-30T13:12:57.467973",
+  "compliance_summary": {
+    "overall_score": 100.0,
+    "total_requirements": 8,
+    "met": 8,
+    "partial": 0,
+    "not_met": 0
+  },
+  "requirements": [
+    {
+      "regulation": "GDPR",
+      "requirement_id": "Article 17",
+      "description": "Right to Erasure (Right to be Forgotten)",
+      "status": "met",
+      "evidence": [
+        "Merkle root: ",
+        "Filtered 1 samples"
+      ]
+    },
+    {
+      "regulation": "GDPR",
+      "requirement_id": "Article 25",
+      "description": "Data Protection by Design and Default",
+      "status": "met",
+      "evidence": [
+        "Pre-deployment privacy audit conducted",
+        "Total samples audited: 1",
+        "Attacks used: perplexity, token_loss, mink_prob, neighborhood"
+      ]
+    },
+    {
+      "regulation": "GDPR",
+      "requirement_id": "Article 32",
+      "description": "Security of Processing",
+      "status": "met",
+      "evidence": [
+        "Differential Privacy: \u03b5=1.0, \u03b4=1e-05",
+        "Mechanism: gaussian",
+        "Detection accuracy: 0.00%"
+      ]
+    },
+    {
+      "regulation": "HIPAA",
+      "requirement_id": "\u00a7164.308(a)(1)(ii)(A)",
+      "description": "Risk Analysis",
+      "status": "met",
+      "evidence": [
+        "Privacy audit conducted before deployment",
+        "Risk assessment completed with quantified metrics",
+        "Audit timestamp: 2026-01-30T13:12:57.467973"
+      ]
+    },
+    {
+      "regulation": "HIPAA",
+      "requirement_id": "\u00a7164.312(a)(1)",
+      "description": "Access Control - Technical Safeguards",
+      "status": "met",
+      "evidence": [
+        "Cryptographic verification of data filtering",
+        "Merkle tree root: ...",
+        "Differential privacy guarantees: \u03b5=1.0"
+      ]
+    },
+    {
+      "regulation": "HIPAA",
+      "requirement_id": "\u00a7164.312(b)",
+      "description": "Audit Controls",
+      "status": "met",
+      "evidence": [
+        "Complete audit trail available",
+        "High-risk samples identified: 1",
+        "Confidence intervals computed for all risk scores"
+      ]
+    },
+    {
+      "regulation": "CCPA",
+      "requirement_id": "\u00a71798.100",
+      "description": "Consumer Right to Know",
+      "status": "met",
+      "evidence": [
+        "Transparency report generated",
+        "Privacy risk scores available for all 1 samples",
+        "Detailed methodology documented"
+      ]
+    },
+    {
+      "regulation": "CCPA",
+      "requirement_id": "\u00a71798.105",
+      "description": "Consumer Right to Delete",
+      "status": "met",
+      "evidence": [
+        "Cryptographic proof of data deletion available",
+        "Deletion verification via Merkle tree"
+      ]
+    }
+  ],
+  "cryptographic_proofs": {
+    "differential_privacy": {
+      "epsilon": 1.0,
+      "delta": 1e-05,
+      "mechanism": "gaussian",
+      "noise_scale": 4.844805262605389,
+      "filtered_count": 1,
+      "total_count": 1,
+      "timestamp": "2026-01-30T13:12:57.248632",
+      "proof_hash": "a39a034dc3225bca011f915e5e7cefc001c8dd5ec6889bb1f080f478420225a3"
+    },
+    "merkle_tree": {
+      "merkle_root": "",
+      "total_samples": 1,
+      "remaining_samples": 0,
+      "filtered_samples": 1,
+      "exclusion_proofs": [
+        {
+          "sample_id": 0,
+          "excluded": true,
+          "proof": null
+        }
+      ]
+    }
+  },
+  "recommendations": [
+    "Detection accuracy below 80% - consider using white-box attacks for better precision",
+    "High-risk sample rate is 100.0% - consider data deduplication or filtering"
+  ]
+}

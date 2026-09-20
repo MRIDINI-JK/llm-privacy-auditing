@@ -1,0 +1,33 @@
+======================================================================
+  LLM PRIVACY AUDIT - EXECUTIVE SUMMARY
+======================================================================
+
+Model: gpt2
+Audit Date: 2026-01-30 13:12:57
+Total Samples: 1
+High-Risk Samples: 1 (100.0%)
+
+----------------------------------------------------------------------
+PRIVACY METRICS
+----------------------------------------------------------------------
+Filter Rate: 100.00%
+Mean Risk Score: 0.7000
+Max Risk Score: 0.7000
+
+----------------------------------------------------------------------
+CRYPTOGRAPHIC VERIFICATION
+----------------------------------------------------------------------
+DP Budget: epsilon=1.0, delta=1e-05
+DP Mechanism: gaussian
+Merkle Root: ...
+Proof Verification: PASSED
+
+----------------------------------------------------------------------
+REGULATORY COMPLIANCE
+----------------------------------------------------------------------
+Overall Score: 100.0%
+Requirements Met: 8/8
+
+Recommendations:
+  1. Detection accuracy below 80% - consider using white-box attacks for better precision
+  2. High-risk sample rate is 100.0% - consider data deduplication or filtering

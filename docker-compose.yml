@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  # Privacy Audit API
+  api:
+    build: .
+    container_name: privacy-audit-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./outputs:/app/outputs
+      - ./models:/app/models
+    environment:
+      - PYTHONUNBUFFERED=1
+      - HF_HOME=/app/models/cache
+    command: python -m uvicorn src.api:app --host 0.0.0.0 --port 8000 --reload
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+  
+  # Dashboard
+  dashboard:
+    build: .
+    container_name: privacy-audit-dashboard
+    ports:
+      - "8050:8050"
+    volumes:
+      - ./outputs:/app/outputs
+    command: python src/dashboard.py --port 8050
+    restart: unless-stopped
+    depends_on:
+      - api
+  
+  # Optional: Redis for job queue (production)
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: privacy-audit-redis
+  #   ports:
+  #     - "6379:6379"
+  #   restart: unless-stopped
+  
+  # Optional: PostgreSQL for persistent storage
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: privacy-audit-db
+  #   environment:
+  #     POSTGRES_DB: privacy_audit
+  #     POSTGRES_USER: audit_user
+  #     POSTGRES_PASSWORD: secure_password
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+  #   restart: unless-stopped
+
+# volumes:
+#   postgres_data:
+
+networks:
+  default:
+    name: privacy-audit-network

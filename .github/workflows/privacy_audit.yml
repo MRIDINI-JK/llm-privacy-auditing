@@ -1,0 +1,83 @@
+name: LLM Privacy Audit CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'models/**'
+      - 'checkpoints/**'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      model_path:
+        description: 'Path to model checkpoint'
+        required: true
+      risk_threshold:
+        description: 'Risk threshold (0-1)'
+        required: false
+        default: '0.7'
+
+jobs:
+  privacy-audit:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install -e .
+    
+    - name: Run Privacy Audit
+      id: audit
+      run: |
+        python run_audit.py \
+          --model ${{ github.event.inputs.model_path || 'gpt2' }} \
+          --max_samples 100 \
+          --risk_threshold ${{ github.event.inputs.risk_threshold || '0.7' }} \
+          --output_dir outputs/ci_audit
+    
+    - name: Check Audit Results
+      run: |
+        python scripts/check_audit_results.py \
+          --audit_file outputs/ci_audit/compliance_report.json \
+          --fail_on_high_risk
+    
+    - name: Upload Audit Report
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: privacy-audit-report
+        path: |
+          outputs/ci_audit/*.json
+          outputs/ci_audit/*.csv
+          outputs/ci_audit/*.txt
+    
+    - name: Comment PR with Results
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const summary = fs.readFileSync('outputs/ci_audit/executive_summary.txt', 'utf8');
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '## Privacy Audit Results\n\n```\n' + summary + '\n```'
+          });
+    
+    - name: Fail on High Risk
+      run: |
+        RISK_RATE=$(python -c "import json; data=json.load(open('outputs/ci_audit/audit_report.json')); print(data['privacy_loss']['filter_rate'])")
+        if (( $(echo "$RISK_RATE > 0.5" | bc -l) )); then
+          echo "::error::High-risk sample rate exceeds 50%"
+          exit 1
+        fi

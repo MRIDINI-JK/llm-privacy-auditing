@@ -1,0 +1,29 @@
+{
+  "differential_privacy": {
+    "epsilon": 1.0,
+    "delta": 1e-05,
+    "mechanism": "gaussian",
+    "noise_scale": 4.844805262605389,
+    "filtered_count": 1,
+    "total_count": 1,
+    "timestamp": "2026-01-30T13:12:57.248632",
+    "proof_hash": "a39a034dc3225bca011f915e5e7cefc001c8dd5ec6889bb1f080f478420225a3"
+  },
+  "merkle_tree": {
+    "merkle_root": "",
+    "total_samples": 1,
+    "remaining_samples": 0,
+    "filtered_samples": 1,
+    "exclusion_proofs": [
+      {
+        "sample_id": 0,
+        "excluded": true,
+        "proof": null
+      }
+    ]
+  },
+  "verification": {
+    "dp_proof_valid": true,
+    "timestamp": "2026-01-30T13:12:57.641732"
+  }
+}
